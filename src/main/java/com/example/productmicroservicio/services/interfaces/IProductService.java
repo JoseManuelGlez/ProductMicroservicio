@@ -8,9 +8,9 @@ import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse
 import java.util.List;
 
 public interface IProductService {
-    CreateProductResponse create(CreateProductRequest request);
+    BaseResponse create(CreateProductRequest request);
 
-    CreateProductResponse fillOut(Long id, CreateProductRequest request);
+    BaseResponse fillOut(Long id, CreateProductRequest request);
 
     List<CreateProductResponse> list();
 
@@ -18,5 +18,5 @@ public interface IProductService {
 
     void delete(Long id);
 
-    CreateProductResponse buy(Long id, CreateProductRequest request);
+    BaseResponse buy(Long id, CreateProductRequest request);
 }

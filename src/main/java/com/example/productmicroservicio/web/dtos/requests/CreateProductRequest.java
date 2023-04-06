@@ -9,4 +9,5 @@ public class CreateProductRequest {
     private Double price;
     private String description;
     private Long amount;
+    private String sessionId;
 }

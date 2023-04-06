@@ -7,6 +7,7 @@ import com.example.productmicroservicio.web.dtos.requests.CreateProductRequest;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
 import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,26 +19,49 @@ public class ProductServiceImpl implements IProductService {
     private IProductRepository repository;
 
     @Override
-    public CreateProductResponse create(CreateProductRequest request) {
-        Product save = repository.save(from(request));
+    public BaseResponse create(CreateProductRequest request) {
+        Product product = repository.save(from(request));
 
-        return from(save);
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(product)
+                .message("The product was saved")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.CREATED)
+                .statusCode(HttpStatus.CREATED.value())
+                .build();
     }
 
     @Override
-    public CreateProductResponse fillOut(Long id, CreateProductRequest request) {
+    public BaseResponse fillOut(Long id, CreateProductRequest request) {
         Product product = findAndEnsureExist(id);
         Long newTotal = request.getAmount() + product.getAmount();
         product.setAmount(newTotal);
-        return from(repository.save(product));
+
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(product)
+                .message("The product was filled out")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.CREATED)
+                .statusCode(HttpStatus.CREATED.value())
+                .build();
     }
 
     @Override
-    public CreateProductResponse buy(Long id, CreateProductRequest request) {
+    public BaseResponse buy(Long id, CreateProductRequest request) {
         Product product = findAndEnsureExist(id);
         Long newTotal = product.getAmount() - request.getAmount();
         product.setAmount(newTotal);
-        return from(repository.save(product));
+
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(product)
+                .message("The product was bought")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.CREATED)
+                .statusCode(HttpStatus.CREATED.value())
+                .build();
     }
 
     @Override

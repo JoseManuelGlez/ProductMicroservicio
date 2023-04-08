@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CreateFillOutRequest {
+public class CreateListRequest {
     private Long productId;
-    private Double amount;
     private String sessionId;
 }

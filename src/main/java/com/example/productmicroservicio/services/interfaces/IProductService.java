@@ -1,24 +1,19 @@
 package com.example.productmicroservicio.services.interfaces;
 
 import com.example.productmicroservicio.persistances.entities.Product;
-import com.example.productmicroservicio.web.dtos.requests.CreateBuyRequest;
-import com.example.productmicroservicio.web.dtos.requests.CreateFillOutRequest;
-import com.example.productmicroservicio.web.dtos.requests.CreateProductRequest;
+import com.example.productmicroservicio.web.dtos.requests.*;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
-import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
-
-import java.util.List;
 
 public interface IProductService {
     BaseResponse create(CreateProductRequest request);
 
-    BaseResponse fillOut(Long id, CreateFillOutRequest request);
+    BaseResponse fillOut(CreateFillOutRequest request);
 
-    List<CreateProductResponse> list();
+    BaseResponse list(CreateListRequest request);
 
-    Product findById(Long id);
+    BaseResponse findById(CreateFindByIdRequest request);
 
-    void delete(Long id);
+    BaseResponse delete(CreateFindByIdRequest request);
 
-    BaseResponse buy(Long id, CreateBuyRequest request);
+    BaseResponse buy(CreateBuyRequest request);
 }

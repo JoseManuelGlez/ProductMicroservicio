@@ -3,9 +3,7 @@ package com.example.productmicroservicio.services;
 import com.example.productmicroservicio.persistances.entities.Product;
 import com.example.productmicroservicio.persistances.repositories.IProductRepository;
 import com.example.productmicroservicio.services.interfaces.IProductService;
-import com.example.productmicroservicio.web.dtos.requests.CreateBuyRequest;
-import com.example.productmicroservicio.web.dtos.requests.CreateFillOutRequest;
-import com.example.productmicroservicio.web.dtos.requests.CreateProductRequest;
+import com.example.productmicroservicio.web.dtos.requests.*;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
 import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +33,8 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public BaseResponse fillOut(Long id, CreateFillOutRequest request) {
-        Product product = findAndEnsureExist(id);
+    public BaseResponse fillOut(CreateFillOutRequest request) {
+        Product product = findAndEnsureExist(request.getProductId());
         double newTotal = request.getAmount() + product.getAmount();
         product.setAmount(newTotal);
 
@@ -45,14 +43,14 @@ public class ProductServiceImpl implements IProductService {
                 .data(product)
                 .message("The product was filled out")
                 .success(Boolean.TRUE)
-                .httpStatus(HttpStatus.CREATED)
-                .statusCode(HttpStatus.CREATED.value())
+                .httpStatus(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
                 .build();
     }
 
     @Override
-    public BaseResponse buy(Long id, CreateBuyRequest request) {
-        Product product = findAndEnsureExist(id);
+    public BaseResponse buy(CreateBuyRequest request) {
+        Product product = findAndEnsureExist(request.getProductId());
         double newTotal = product.getAmount() - request.getAmount();
         product.setAmount(newTotal);
 
@@ -61,26 +59,53 @@ public class ProductServiceImpl implements IProductService {
                 .data(product)
                 .message("The product was bought")
                 .success(Boolean.TRUE)
-                .httpStatus(HttpStatus.CREATED)
-                .statusCode(HttpStatus.CREATED.value())
+                .httpStatus(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
                 .build();
     }
 
     @Override
-    public List<CreateProductResponse> list() {
-        return repository.findAll().stream()
+    public BaseResponse list(CreateListRequest request) {
+        Object object = repository.findAll().stream()
                 .map(this::from)
                 .collect(Collectors.toList());
+
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(object)
+                .message("The products was found")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
+                .build();
     }
 
     @Override
-    public Product findById(Long id) {
-        return findAndEnsureExist(id);
+    public BaseResponse findById(CreateFindByIdRequest request) {
+        Product product = findAndEnsureExist(request.getProductId());
+
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(product)
+                .message("The product was bought")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.FOUND)
+                .statusCode(HttpStatus.FOUND.value())
+                .build();
     }
 
     @Override
-    public void delete(Long id) {
-        repository.delete(findAndEnsureExist(id));
+    public BaseResponse delete(CreateFindByIdRequest request) {
+        repository.delete(findAndEnsureExist(request.getProductId()));
+
+        return BaseResponse.builder()
+                .sessionId(request.getSessionId())
+                .data(null)
+                .message("The product was eliminated")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.OK)
+                .statusCode(HttpStatus.OK.value())
+                .build();
     }
 
     private Product from(CreateProductRequest request){

@@ -3,6 +3,8 @@ package com.example.productmicroservicio.services;
 import com.example.productmicroservicio.persistances.entities.Product;
 import com.example.productmicroservicio.persistances.repositories.IProductRepository;
 import com.example.productmicroservicio.services.interfaces.IProductService;
+import com.example.productmicroservicio.web.dtos.requests.CreateBuyRequest;
+import com.example.productmicroservicio.web.dtos.requests.CreateFillOutRequest;
 import com.example.productmicroservicio.web.dtos.requests.CreateProductRequest;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
 import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
@@ -33,9 +35,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public BaseResponse fillOut(Long id, CreateProductRequest request) {
+    public BaseResponse fillOut(Long id, CreateFillOutRequest request) {
         Product product = findAndEnsureExist(id);
-        Long newTotal = request.getAmount() + product.getAmount();
+        double newTotal = request.getAmount() + product.getAmount();
         product.setAmount(newTotal);
 
         return BaseResponse.builder()
@@ -49,9 +51,9 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public BaseResponse buy(Long id, CreateProductRequest request) {
+    public BaseResponse buy(Long id, CreateBuyRequest request) {
         Product product = findAndEnsureExist(id);
-        Long newTotal = product.getAmount() - request.getAmount();
+        double newTotal = product.getAmount() - request.getAmount();
         product.setAmount(newTotal);
 
         return BaseResponse.builder()

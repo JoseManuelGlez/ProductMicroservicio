@@ -4,11 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class CreateProductRequest {
-    private String name;
-    private Double price;
-    private String description;
+public class CreateFillOutRequest {
     private Double amount;
     private String sessionId;
-    private byte[] image;
 }

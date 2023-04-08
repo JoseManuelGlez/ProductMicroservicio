@@ -9,6 +9,7 @@ public class CreateProductResponse {
     private String name;
     private Double price;
     private String description;
-    private Long amount;
+    private Double amount;
     private String sessionId;
+    private byte[] image;
 }

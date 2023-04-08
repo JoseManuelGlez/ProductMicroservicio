@@ -1,6 +1,8 @@
 package com.example.productmicroservicio.services.interfaces;
 
 import com.example.productmicroservicio.persistances.entities.Product;
+import com.example.productmicroservicio.web.dtos.requests.CreateBuyRequest;
+import com.example.productmicroservicio.web.dtos.requests.CreateFillOutRequest;
 import com.example.productmicroservicio.web.dtos.requests.CreateProductRequest;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
 import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
@@ -10,7 +12,7 @@ import java.util.List;
 public interface IProductService {
     BaseResponse create(CreateProductRequest request);
 
-    BaseResponse fillOut(Long id, CreateProductRequest request);
+    BaseResponse fillOut(Long id, CreateFillOutRequest request);
 
     List<CreateProductResponse> list();
 
@@ -18,5 +20,5 @@ public interface IProductService {
 
     void delete(Long id);
 
-    BaseResponse buy(Long id, CreateProductRequest request);
+    BaseResponse buy(Long id, CreateBuyRequest request);
 }

@@ -5,12 +5,12 @@ import com.example.productmicroservicio.persistances.repositories.IProductReposi
 import com.example.productmicroservicio.services.interfaces.IProductService;
 import com.example.productmicroservicio.web.dtos.requests.*;
 import com.example.productmicroservicio.web.dtos.responses.BaseResponse;
+import com.example.productmicroservicio.web.dtos.responses.BuyResponse;
 import com.example.productmicroservicio.web.dtos.responses.CreateProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public BaseResponse fillOut(CreateFillOutRequest request) {
         Product product = findAndEnsureExist(request.getProductId());
-        double newTotal = request.getAmount() + product.getAmount();
+        long newTotal = request.getAmount() + product.getAmount();
         product.setAmount(newTotal);
 
         return BaseResponse.builder()
@@ -51,17 +51,26 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public BaseResponse buy(CreateBuyRequest request) {
         Product product = findAndEnsureExist(request.getProductId());
-        double newTotal = product.getAmount() - request.getAmount();
+        long newTotal = product.getAmount() - request.getAmount();
         product.setAmount(newTotal);
+        double cost = product.getPrice() * request.getAmount();
 
         return BaseResponse.builder()
                 .sessionId(request.getSessionId())
-                .data(product)
+                .data(ticket(product, request.getAmount(), cost))
                 .message("The product was bought")
                 .success(Boolean.TRUE)
                 .httpStatus(HttpStatus.OK)
                 .statusCode(HttpStatus.OK.value())
                 .build();
+    }
+
+    private BuyResponse ticket(Product product, Long request, double cost) {
+        BuyResponse response = new BuyResponse();
+        response.setAmount(request);
+        response.setPrice(cost);
+        response.setProduct(product);
+        return response;
     }
 
     @Override

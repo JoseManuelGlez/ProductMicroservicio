@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class CreateBuyRequest {
     private Long productId;
-    private Double amount;
+    private Long amount;
     private String sessionId;
 }

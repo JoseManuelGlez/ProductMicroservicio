@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter @Setter
 public class CreateFillOutRequest {
     private Long productId;
-    private Double amount;
+    private Long amount;
     private String sessionId;
 }

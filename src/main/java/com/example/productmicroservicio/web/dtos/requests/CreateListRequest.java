@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter @Setter
 public class CreateListRequest {
-    private Long productId;
     private String sessionId;
+
 }
